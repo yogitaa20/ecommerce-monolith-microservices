@@ -1,41 +1,220 @@
-# E-Commerce Application: Monolithic vs Microservices
+\# E-Commerce Application: Monolithic vs Microservices
 
-A beginner-friendly demonstration with the same storefront in two architectures. Built with Node.js + Express and a plain HTML/CSS/JavaScript frontend.
 
-## What is included
-- `monolith/`: one Node.js application serves the UI and handles product and order APIs.
-- `microservices/`: separate Product Service and Order Service plus a static storefront; Docker Compose starts all three.
-- Product listing, add-to-cart, quantity controls, checkout/order creation, and order confirmation.
 
-## Requirements
-- Node.js 18+ and npm
-- For the microservices version, Docker Desktop with Docker Compose
+A beginner-friendly demonstration comparing Monolithic and Microservices architectures using Node.js, Express, HTML, CSS, JavaScript, and Docker Compose.
 
-## Run the monolithic app
-1. Open a terminal in `monolith`.
-2. Run `npm install`
-3. Run `npm start`
-4. Open http://localhost:3000
 
-## Run the microservices app
-1. Open a terminal in `microservices`.
-2. Start Docker Desktop.
-3. Run `docker compose up --build`
-4. Open http://localhost:8080
-5. Product Service runs on port 3001 and Order Service on port 3002.
-6. Stop with `Ctrl+C`, then optionally run `docker compose down`.
 
-## Architecture explanation
-**Monolithic:** frontend and both product/order API routes are in one Express application/process. It is straightforward to start, but changes and scaling are coupled.
+\## Project Structure
 
-**Microservices:** the storefront calls Product Service for the catalog and Order Service to create/list orders. Each service runs independently in its own container, so it can be developed, deployed, and scaled separately. This teaching demo uses in-memory sample data; restarting a service resets orders. A production application should use persistent databases, authentication, validation, payment integration, and secure configuration.
 
-## Screenshots for submission
-Capture these real screens after running both versions:
-1. Monolith storefront showing the product cards.
-2. Monolith with an item in the cart / checkout confirmation.
-3. Microservices storefront showing product cards.
-4. Microservices with an order confirmation.
-5. Optional: terminal showing `docker compose ps` and the three running containers.
 
-Do not upload `.env` files, passwords, tokens, or other secrets. After testing, create a **public** GitHub repository and push this project. Replace this README's author details with your own if required by your professor.
+\- `monolith/` — A single Node.js application that serves the storefront and handles product and order APIs.
+
+\- `microservices/` — A separate Product Service, Order Service, and static storefront.
+
+\- `submission-screenshots/` — Screenshots for the original application submission.
+
+\- `assignment4-screenshots/` — Additional screenshots for Docker Compose configuration and testing, if included in the repository.
+
+
+
+\## Features
+
+
+
+\- Product listing
+
+\- Shopping cart and quantity controls
+
+\- Checkout and demo order creation
+
+\- Order confirmation
+
+\- Separate Product and Order services in the microservices architecture
+
+\- Docker Compose deployment
+
+\- Custom Docker bridge network
+
+\- Named volume for persistent order storage
+
+
+
+\## Requirements
+
+
+
+\- Node.js and npm
+
+\- Docker Desktop
+
+\- Docker Compose
+
+
+
+\## Run the Monolithic Application
+
+
+
+1\. Open a terminal in the `monolith` folder.
+
+2\. Install dependencies:
+
+
+
+&#x20;  ```bash
+
+&#x20;  npm install
+
+&#x20;  ```
+
+
+
+3\. Start the application:
+
+
+
+&#x20;  ```bash
+
+&#x20;  npm start
+
+&#x20;  ```
+
+
+
+4\. Open http://localhost:3000 in your browser.
+
+
+
+\## Run the Microservices Application
+
+
+
+1\. Open a terminal in the `microservices` folder.
+
+2\. Ensure Docker Desktop is running.
+
+3\. Start the application:
+
+
+
+&#x20;  ```bash
+
+&#x20;  docker compose up --build -d
+
+&#x20;  ```
+
+
+
+4\. Open http://localhost:8081 in your browser.
+
+
+
+\### Services and Ports
+
+
+
+| Service | Port |
+
+|---|---:|
+
+| Storefront | 8081 |
+
+| Product Service | 3001 |
+
+| Order Service | 3002 |
+
+
+
+\### Docker Network and Volume
+
+
+
+\- Custom bridge network: `microservices\_shopnest-network`
+
+\- Named volume: `microservices\_order-data`
+
+\- The Order Service saves order information in a JSON file under `/data`, backed by the named volume.
+
+
+
+Check the services:
+
+
+
+```bash
+
+docker compose ps
+
+```
+
+
+
+The Compose file is located at `microservices/docker-compose.yml`. From the project root, use:
+
+
+
+```bash
+
+docker compose -f microservices/docker-compose.yml ps
+
+```
+
+
+
+\## Order Persistence Test
+
+
+
+A demo order was created and verified through the Order Service API. The Order Service container was then recreated, and the order remained available.
+
+
+
+To view orders:
+
+
+
+```bash
+
+curl http://localhost:3002/api/orders
+
+```
+
+
+
+This demonstrates that the named volume preserves order data when the Order Service container is recreated.
+
+
+
+\## Architecture Explanation
+
+
+
+\*\*Monolithic architecture:\*\* The frontend and product/order API routes are handled by one Express application. It is simple to run, but its components are deployed together.
+
+
+
+\*\*Microservices architecture:\*\* The storefront uses separate Product and Order services. Each service runs in its own container and can be developed and deployed independently.
+
+
+
+\## Screenshots
+
+
+
+Screenshots can document the storefront, cart, order confirmation, Docker Compose configuration, running containers, custom network, named volume, and order persistence test.
+
+
+
+\## Notes
+
+
+
+This is a learning and demonstration project. Checkout is for demo orders only; no real payment is taken.
+
+
+
+Do not upload passwords, tokens, or other secrets to the public repository.
+
