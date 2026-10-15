@@ -1,15 +1,27 @@
+
 services:
   product-service:
     build: ./product-service
     container_name: shopnest-product-service
     ports:
       - "3001:3001"
+    networks:
+      - shopnest-network
+    restart: unless-stopped
 
   order-service:
     build: ./order-service
     container_name: shopnest-order-service
     ports:
       - "3002:3002"
+    environment:
+      PORT: 3002
+      DATA_DIR: /data
+    volumes:
+      - order-data:/data
+    networks:
+      - shopnest-network
+    restart: unless-stopped
 
   storefront:
     image: nginx:alpine
@@ -21,3 +33,13 @@ services:
     depends_on:
       - product-service
       - order-service
+    networks:
+      - shopnest-network
+    restart: unless-stopped
+
+networks:
+  shopnest-network:
+    driver: bridge
+
+volumes:
+  order-data:
