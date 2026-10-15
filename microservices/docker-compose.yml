@@ -1,0 +1,23 @@
+services:
+  product-service:
+    build: ./product-service
+    container_name: shopnest-product-service
+    ports:
+      - "3001:3001"
+
+  order-service:
+    build: ./order-service
+    container_name: shopnest-order-service
+    ports:
+      - "3002:3002"
+
+  storefront:
+    image: nginx:alpine
+    container_name: shopnest-storefront
+    ports:
+      - "8081:80"
+    volumes:
+      - ./storefront:/usr/share/nginx/html:ro
+    depends_on:
+      - product-service
+      - order-service
